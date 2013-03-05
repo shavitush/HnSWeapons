@@ -5,7 +5,7 @@
 
 #pragma semicolon 1
 
-#define PLUGIN_VERSION "1.0"
+#define PLUGIN_VERSION "1.1"
 
 new Handle:gH_Enabled = INVALID_HANDLE;
 new Handle:gH_Buyzones = INVALID_HANDLE;
@@ -114,7 +114,7 @@ public Action:WeaponCanUse(client, weapon)
 		{
 			if(gB_RestrictT)
 			{
-				if(!StrEqual(sWeapon, "weapon_knife") && StrContains(sWeapon, "grenade", false) == -1)
+				if(!StrEqual(sWeapon, "weapon_knife") && StrContains(sWeapon, "grenade", false) == -1 && StrContains(sWeapon, "flash", false) == -1)
 				{
 					return Plugin_Handled;
 				}
