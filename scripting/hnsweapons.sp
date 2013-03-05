@@ -5,7 +5,7 @@
 
 #pragma semicolon 1
 
-#define PLUGIN_VERSION "1.1"
+#define PLUGIN_VERSION "1.2"
 
 new Handle:gH_Enabled = INVALID_HANDLE;
 new Handle:gH_Buyzones = INVALID_HANDLE;
@@ -16,8 +16,6 @@ new bool:gB_Enabled;
 new bool:gB_Buyzones;
 new bool:gB_RestrictCT;
 new bool:gB_RestrictT;
-
-new gI_Entity = -1;
 
 public Plugin:myinfo = 
 {
@@ -49,9 +47,6 @@ public OnPluginStart()
 	HookConVarChange(gH_RestrictCT, OnConVarChanged);
 	HookConVarChange(gH_RestrictT, OnConVarChanged);
 	
-	HookEvent("round_start", EnableBuyzones);
-	HookEvent("round_end", EnableBuyzones);
-	
 	AutoExecConfig(true, "hnsweapons");
 }
 
@@ -60,15 +55,16 @@ public OnConVarChanged(Handle:cvar, const String:oldVal[], const String:newVal[]
 	if(cvar == gH_Enabled)
 	{
 		gB_Enabled = bool:StringToInt(newVal);
-		
-		EnableBuyzones(INVALID_HANDLE, "auto", true);
 	}
 	
 	else if(cvar == gH_Buyzones)
 	{
 		gB_Buyzones = bool:StringToInt(newVal);
 		
-		EnableBuyzones(INVALID_HANDLE, "auto", true);
+		if(gB_Buyzones)
+		{
+			PrintToServer("Restart the map to enable buyzones.");
+		}
 	}
 	
 	else if(cvar == gH_RestrictCT)
@@ -132,26 +128,13 @@ public OnEntityCreated(entity, const String:classname[])
 		return;
 	}
 	
-	if(StrEqual(classname, "func_buyzone"))
+	if(StrContains(classname, "buyzone") != -1)
 	{
 		if(!gB_Buyzones)
 		{
-			AcceptEntityInput(entity, "Disable");
+			AcceptEntityInput(entity, "Kill");
 		}
 	}
-}
-
-public Action:EnableBuyzones(Handle:event, const String:name[], bool:dB)
-{
-	while((gI_Entity = FindEntityByClassname(gI_Entity, "func_buyzone")) != -1)
-	{
-		if(gI_Entity != INVALID_ENT_REFERENCE)
-		{
-			AcceptEntityInput(gI_Entity, gB_Buyzones? "Enable":"Disable");
-		}
-	}
-	
-	return Plugin_Continue;
 }
 
 stock bool:IsValidClient(client, bool:alive = false)
