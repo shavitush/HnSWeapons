@@ -9,7 +9,7 @@ Features
 
 Remove buyzones.
 Remove the usability for using any weapon but knife for CTs.
-Remove the usability for using any weapon but knife and grenades for Ts. - sm_hnsweapons_t
+Remove the usability for using any weapon but knife and grenades for Ts.
 
 
 Console Variables
