@@ -5,7 +5,7 @@
 
 #pragma semicolon 1
 
-#define PLUGIN_VERSION "1.2"
+#define PLUGIN_VERSION "1.3.0"
 
 new Handle:gH_Enabled = INVALID_HANDLE;
 new Handle:gH_Buyzones = INVALID_HANDLE;
@@ -60,11 +60,6 @@ public OnConVarChanged(Handle:cvar, const String:oldVal[], const String:newVal[]
 	else if(cvar == gH_Buyzones)
 	{
 		gB_Buyzones = bool:StringToInt(newVal);
-		
-		if(gB_Buyzones)
-		{
-			PrintToServer("Restart the map to enable buyzones.");
-		}
 	}
 	
 	else if(cvar == gH_RestrictCT)
@@ -81,6 +76,12 @@ public OnConVarChanged(Handle:cvar, const String:oldVal[], const String:newVal[]
 public OnClientPutInServer(client)
 {
 	SDKHook(client, SDKHook_WeaponCanUse, WeaponCanUse);
+	SDKHook(client, SDKHook_PostThinkPost, PostThinkPost);
+}
+
+public PostThinkPost(client)  
+{
+	SetEntProp(client, Prop_Send, "m_bInBuyZone", gB_Buyzones? 0:1);
 }
 
 public Action:WeaponCanUse(client, weapon)
@@ -119,22 +120,6 @@ public Action:WeaponCanUse(client, weapon)
 	}
 	
 	return Plugin_Continue;
-}
-
-public OnEntityCreated(entity, const String:classname[])
-{
-	if(!gB_Enabled)
-	{
-		return;
-	}
-	
-	if(StrContains(classname, "buyzone") != -1)
-	{
-		if(!gB_Buyzones)
-		{
-			AcceptEntityInput(entity, "Kill");
-		}
-	}
 }
 
 stock bool:IsValidClient(client, bool:alive = false)
