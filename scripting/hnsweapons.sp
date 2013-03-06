@@ -5,7 +5,7 @@
 
 #pragma semicolon 1
 
-#define PLUGIN_VERSION "1.3.0"
+#define PLUGIN_VERSION "1.3.1"
 
 new Handle:gH_Enabled = INVALID_HANDLE;
 new Handle:gH_Buyzones = INVALID_HANDLE;
@@ -81,7 +81,7 @@ public OnClientPutInServer(client)
 
 public PostThinkPost(client)  
 {
-	SetEntProp(client, Prop_Send, "m_bInBuyZone", gB_Buyzones? 0:1);
+	SetEntProp(client, Prop_Send, "m_bInBuyZone", (gB_Enabled && gB_Buyzones)? 0:GetEntProp(client, Prop_Send, "m_bInBuyZone"));
 }
 
 public Action:WeaponCanUse(client, weapon)
