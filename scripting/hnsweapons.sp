@@ -81,7 +81,10 @@ public OnClientPutInServer(client)
 
 public PostThinkPost(client)  
 {
-	SetEntProp(client, Prop_Send, "m_bInBuyZone", (gB_Enabled && gB_Buyzones)? 0:GetEntProp(client, Prop_Send, "m_bInBuyZone"));
+	if(gB_Enabled && gB_Buyzones)
+	{
+		SetEntProp(client, Prop_Send, "m_bInBuyZone", 0);
+	}
 }
 
 public Action:WeaponCanUse(client, weapon)
