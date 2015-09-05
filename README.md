@@ -34,10 +34,4 @@ Config will be auto created and executed in cfg/sourcemod/hnsweapons.cfg.
 Requirements
 ==========
 
-SourceMod 1.5.0-dev+3791 and above.
-
-SDKHooks, included in SourceMod 1.5.0.
-
-SDKTools
-
-Cstrike extension
+SourceMod 1.7.0 and above.
